@@ -9,6 +9,8 @@ telescope.setup({
         file_ignore_patterns = {
             ".git/*",
             "node_modules/*",
+            "target/*",
+            "bin/*",
             "cache",
             "CMakeFiles",
             "out",

@@ -1,4 +1,4 @@
-local choice = "netrw"
+local choice = "oil"
 
 if choice == "netrw" then
     vim.keymap.set('n', '<Space>fm',":NvimTreeToggle<cr>", { desc = 'Find file explorer' })
