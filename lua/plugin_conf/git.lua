@@ -1,5 +1,3 @@
-local notify = nil
-
 function isDiffviewOpen()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
         local buf = vim.api.nvim_win_get_buf(win)
@@ -32,13 +30,7 @@ function toggleGitDiffview()
         if isGitRepo() then
             vim.cmd.DiffviewOpen()
         else
-            if not notify then
-                notify = require "notify"
-            end
-
-            if not notify then return end
-
-            notify("This workspace does not have a git repo","error")
+            print("INFO: This workspace does not have a .git folder")
         end
     end
 end

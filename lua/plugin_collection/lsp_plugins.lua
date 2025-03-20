@@ -15,35 +15,33 @@ return {
 		event = "VeryLazy",
 	},
 
-	{ "folke/neodev.nvim", event = "InsertEnter", opts = {} },
-
 	{ "hrsh7th/cmp-nvim-lsp", event = "VeryLazy" },
-	{ "hrsh7th/cmp-buffer", event = "VeryLazy" },
-
-	{ "hrsh7th/cmp-path", event = "VeryLazy" },
-
-	{ "hrsh7th/nvim-cmp", event = "VeryLazy" },
-
+	-- { "hrsh7th/cmp-buffer", event = "VeryLazy" },
+	--
+	-- { "hrsh7th/cmp-path", event = "VeryLazy" },
+	--
+	-- { "hrsh7th/nvim-cmp", event = "VeryLazy" },
+	--
 	{ "hrsh7th/cmp-nvim-lsp-signature-help", event = "VeryLazy" },
-
-	{ "hrsh7th/cmp-cmdline", event = "VeryLazy" },
-
-	{ 
-        "neovim/nvim-lspconfig", 
-        event = "VeryLazy" 
-    },
-
+	--
+	-- { "hrsh7th/cmp-cmdline", event = "VeryLazy" },
+	--
+	-- { 
+	--        "neovim/nvim-lspconfig", 
+	--        event = "VeryLazy" 
+	--    },
+	--
 	{
 		"williamboman/mason.nvim",
 		"williamboman/mason-lspconfig.nvim",
 		"neovim/nvim-lspconfig",
 		event = "VeryLazy",
 	},
-
-    {
-        "habamax/vim-godot",
-        event = "VimEnter"
-    },
+	--
+	--    {
+	--        "habamax/vim-godot",
+	--        event = "VimEnter"
+	--    },
 
 	{
 		"VonHeikemen/lsp-zero.nvim",

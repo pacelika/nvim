@@ -1,26 +1,7 @@
 return {
-	{
-		"ThePrimeagen/refactoring.nvim",
-		event = "VeryLazy",
-		dependancies = {
-			{ "nvim-lua/plenary.nvim" },
-		},
-	},
-
-    {
-      'Wansmer/treesj',
-      event = {
-          "BufReadPre",
-      },
-      dependencies = {
-          'nvim-treesitter/nvim-treesitter',
-      },
-    },
-
     {
         "goolord/alpha-nvim",
     },
-
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
@@ -32,7 +13,6 @@ return {
 	},
 
 	{"kevinhwang91/promise-async"},
-	{ "mbbill/undotree", event = "VeryLazy" },
 
 	{
 		"kylechui/nvim-surround",

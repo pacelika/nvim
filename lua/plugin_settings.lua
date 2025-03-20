@@ -25,12 +25,8 @@ local defaults = {
     },
 
     numb = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.numb"
-    },
-
-    undotree = {
-        enabled = true,
     },
 
     lualine = {
@@ -39,7 +35,7 @@ local defaults = {
     },
 
     refactoring = {
-        enabled = true,
+        enabled = false,
         module = "refactoring",
     },
 
@@ -49,12 +45,12 @@ local defaults = {
     },
 
     treesj = {
-        enabled = true,
+        enabled = false,
         modules = {_ = "plugin_conf.treesj"}
     },
 
     nvim_tree = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.nvim_tree",
     },
 
@@ -64,7 +60,7 @@ local defaults = {
     },
 
     godot = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.godot"
     },
 
@@ -79,7 +75,7 @@ local defaults = {
     },
 
     dap = {
-        enabled = true,
+        enabled = false,
         module = "plugin_conf.dap"
     }
 }

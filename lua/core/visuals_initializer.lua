@@ -1,6 +1,6 @@
 local M = {}
 
-local color_names = {"rose-pine-main","gruvbox"}
+local color_names = {"desert"}
 
 function M.setup()
     vim.api.nvim_create_augroup('MyColorSchemeGroup', { clear = true })
@@ -13,7 +13,7 @@ function M.setup()
       end
     })
 
-    local color_name = color_names[2]
+    local color_name = color_names[1]
 
     assert(color_name)
 
