@@ -21,7 +21,6 @@ local plugins_to_be_installed = {
 if preferences.conf.template == "everything" then
 	   local plugins_collection = {
 	       require("plugin_collection.lsp_plugins"),
-	       -- require("plugin_collection.dap_plugins"),
 	       require("plugin_collection.functionality_plugins"),
 	       require("plugin_collection.color_scheme_plugins"),
 	       require("plugin_collection.visual_plugins"),
