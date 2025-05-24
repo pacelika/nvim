@@ -1,5 +1,12 @@
 return {
 	{"kevinhwang91/promise-async"},
+    -- {
+    --     "vhyrro/luarocks.nvim",
+    --     priority = 1001,
+    --     opts = {
+    --         rocks = { "magick" },
+    --     },
+    -- },
 
 	{
 	  'Wansmer/treesj',

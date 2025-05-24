@@ -19,21 +19,25 @@ capabilities.textDocument.signatureHelp = {
 }
 
 local lsp_servers = {
-{
+    "lua_ls",
+    "pyright",
+    "rust_analyzer",
+    "zls",
+    "csharp_ls",
+}
+
+table.insert(lsp_servers,{
     "clangd",
     {
         capabilities = capabilities,
-
         cmd = {
             "clangd",
             "--background-index",
             "--suggest-missing-includes",
         },
         filetypes = { "c", "cpp", "objc", "objcpp" },
-}
-},
-    "lua_ls","pyright","rust_analyzer","zls","csharp_ls",
-}
+    }
+})
 
 for _,server in ipairs(lsp_servers) do
     if type(server) == "string" then
@@ -53,10 +57,29 @@ vim.diagnostic.config({
     virtual_text = true,
 })
 
-vim.keymap.set('n', '<Space>fsr', ":lua vim.lsp.buf.references()<cr>", { desc = 'Find Symbol references' })
-vim.keymap.set('n', '<Space>fsw', ":lua vim.lsp.buf.workspace_symbol()<cr>", { desc = 'Find Symbol workspace' })
+vim.api.nvim_create_autocmd("LspAttach",{
+    callback = function(args)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+        if not client then return end
+
+        if client.supports_method("textDocument/formatting") then
+            vim.keymap.set('n', '<Space>rf', ":lua vim.lsp.buf.format()<cr>", { silent = true,desc = 'Refactor format' })
+            vim.api.nvim_create_autocmd("BufWritePre",{
+                buffer = args.buf,
+                callback = function()
+                    vim.lsp.buf.format({bufnr = args.buf,id = client.id})
+                end
+            })
+        end
+    end
+})
+
+vim.keymap.set('n', '<Space>fsr', ":lua vim.lsp.buf.references()<cr>", { silent = true, desc = 'Find Symbol references' })
+vim.keymap.set('n', '<Space>fsw', ":lua vim.lsp.buf.workspace_symbol()<cr>", { silent = true, desc = 'Find Symbol workspace' })
 vim.keymap.set('n', '<Space>r.', ":lua vim.lsp.buf.code_action()<cr>", {
+    silent = true,
     desc = 'Refactor code action',
 })
 
-require "configs.cmp"
+require "config.cmp"

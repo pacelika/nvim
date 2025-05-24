@@ -3,20 +3,20 @@ local M = {}
 function M.setup()
      require "plugins"
 
-     require "configs.telescope"
-     require "configs.file_explorer"
-     require "configs.treesj"
-     require "configs.tmux_nav"
-     require "configs.terminal"
+     require "config.telescope"
+     require "config.file_explorer"
+     require "config.treesj"
+     require "config.tmux_nav"
+     require "config.terminal"
 
-     require "configs.which_key"
-     require "configs.harpoon"
+     require "config.which_key"
+     require "config.harpoon"
 
-     require "configs.git"
+     require "config.git"
      require "gitsigns"
 
-     require "configs.treesitter"
-     require "configs.lsp"
+     require "config.treesitter"
+     require "config.lsp"
 end
 
 return M

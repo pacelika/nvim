@@ -1,6 +1,6 @@
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true,silent = true, desc = "Terminal normal mode" })
 
-vim.keymap.set('n', ';',":FloatermToggle<cr>",{ noremap = true, silent = true, desc = "Terminal toggle" })
+vim.keymap.set('n', ';;',":FloatermToggle<cr>",{ noremap = true, silent = true, desc = "Terminal toggle" })
 
 vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>:FloatermToggle<CR>]], { noremap = true, silent = true, desc = "Terminal toggle" })
 
