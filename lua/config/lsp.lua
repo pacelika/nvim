@@ -1,6 +1,8 @@
 local success
 local lspconfig
 
+local lsp_signature = require('lsp_signature')
+
 success,lspconfig = pcall(require, "lspconfig")
 
 if not success then
@@ -21,14 +23,23 @@ capabilities.textDocument.signatureHelp = {
 local lsp_servers = {
     "lua_ls",
     "pyright",
-    "rust_analyzer",
+    {
+        "rust_analyzer",
+        "rust-analyzer",
+        opts = {
+            settings = {
+                ['rust-analyzer'] = {},
+            },
+            capabilities = capabilities
+        },
+    },
     "zls",
     "csharp_ls",
 }
 
 table.insert(lsp_servers,{
     "clangd",
-    {
+    opts = {
         capabilities = capabilities,
         cmd = {
             "clangd",
@@ -39,16 +50,18 @@ table.insert(lsp_servers,{
     }
 })
 
+local default_opts = {
+    capabilities = capabilities
+}
+
 for _,server in ipairs(lsp_servers) do
     if type(server) == "string" then
-        if vim.fn.executable(server) == 1 then
-            lspconfig[server].setup({
-                capabilities = capabilities
-            })
+        if vim.fn.executable(server) == 1 and lspconfig[server] then
+            lspconfig[server].setup(default_opts)
         end
     elseif type(server) == "table" then
-        if vim.fn.executable(server[1]) == 1 then
-            lspconfig[server[1]].setup(server[2])
+        if vim.fn.executable(server[2] or server[1]) == 1 and lspconfig[server[1]] then
+            lspconfig[server[1]].setup(server.opts or default_opts)
         end
     end
 end
