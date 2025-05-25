@@ -16,7 +16,8 @@ vim.keymap.set('t', '<C-n>', [[<C-\><C-n>:FloatermNew<CR>]],{ noremap = true, si
 vim.keymap.set('t', '<C-d>', [[<C-\><C-n>:FloatermKill<CR>]],{ noremap = true, silent = true, desc = "Terminal kill" })
 
 local last_command = nil
-local cwd = vim.fn.getcwd()
+
+local os_name = vim.loop.os_uname().sysname 
 
 local build_commands = {
     ["build.zig"] = "zig build run",
@@ -25,22 +26,22 @@ local build_commands = {
     ["Cargo.toml"] = "cargo run",
 }
 
-if vim.fn.has("win32") ~= 1 or vim.fn.has("win64") ~= 1 then
-    build_commands["Makefile"] = "make"
-else
+if os_name == "Windows_NT" then
     build_commands["Makefile"] = "mingw32-make"
+else
+    build_commands["Makefile"] = "make"
 end
 
-function get_compile_command()
+function Get_compile_command()
     for file_name,cmd in pairs(build_commands) do
-        local file = cwd .. "/"..file_name
+        local file = vim.fn.getcwd().. "/"..file_name
         local stat = vim.loop.fs_stat(file)
 
         if stat then return cmd end
     end
 end
 
-local function find_terminal_buf()
+function Find_terminal_buf()
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
           local buftype = vim.api.nvim_buf_get_option(bufnr, 'buftype')
           if buftype == 'terminal' then
@@ -50,7 +51,7 @@ local function find_terminal_buf()
 end
 
 function Run_command_in_term()
-    local command = last_command or get_compile_command()
+    local command = last_command or Get_compile_command()
 
     if not command then
         Prompt_command()
@@ -59,9 +60,14 @@ function Run_command_in_term()
 
     if command == nil and last_command == nil then return end
 
-    if not find_terminal_buf() then
+    if not Find_terminal_buf() then
         vim.cmd("FloatermNew")
-        vim.cmd("FloatermSend " .. "clear")
+
+        if os_name == "Windows_NT" then
+            vim.cmd("FloatermSend " .. "cls")
+        else
+            vim.cmd("FloatermSend " .. "clear")
+        end
     else
         vim.cmd("FloatermShow")
     end
@@ -79,7 +85,7 @@ function Prompt_command()
     local cmd = nil
 
     if last_command == nil then
-        last_command = get_compile_command()
+        last_command = Get_compile_command()
     end
 
     if last_command ~= nil then
@@ -89,7 +95,7 @@ function Prompt_command()
     end
 
     if cmd == ";" then
-        last_command = get_compile_command()
+        last_command = Get_compile_command()
         return
     elseif cmd == "" or cmd == nil then
         return

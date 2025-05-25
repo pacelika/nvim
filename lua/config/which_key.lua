@@ -30,7 +30,7 @@ xpcall(function()
     wk.add({"<Space>k",group = "Document"})
     wk.add({"<Space>h",group = "Harpoon"})
     wk.add({"<Space>r",group = "Refactor"})
-    wk.add({"<Space>d",group = "Debug"})
+    wk.add({"<Space>d",group = "Directory"})
 
     wk.add({"<Space>t",group = "Terminal"})
 end, print)
