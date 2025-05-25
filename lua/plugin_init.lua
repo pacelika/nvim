@@ -6,7 +6,7 @@ function M.setup()
      require "config.telescope"
      require "config.file_explorer"
      require "config.treesj"
-     require "config.tmux_nav"
+     -- require "config.tmux_nav"
      require "config.terminal"
 
      require "config.which_key"

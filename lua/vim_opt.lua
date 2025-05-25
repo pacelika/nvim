@@ -55,6 +55,8 @@ function M.setup()
     vo.undofile = true
 
     vo.hlsearch = false
+    vim.o.hlsearch = false
+
     vo.incsearch = true
 
     vo.tags = "./tags;/"

@@ -6,9 +6,9 @@ local vim_g = require("vim_g")
 
 xpcall(function()
     plugin_init.setup()
-    visuals_init.setup()
-    vim_opt.setup()
     vim_g.setup()
+    vim_opt.setup()
+    visuals_init.setup()
 end,print)
 
 vim.cmd("autocmd BufLeave,BufWinLeave * silent! mkview")

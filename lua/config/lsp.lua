@@ -1,8 +1,6 @@
 local success
 local lspconfig
 
-local lsp_signature = require('lsp_signature')
-
 success,lspconfig = pcall(require, "lspconfig")
 
 if not success then

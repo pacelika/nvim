@@ -1,8 +1,10 @@
-vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true,silent = true, desc = "Terminal normal mode" })
+vim.keymap.set('t', '<C-\\>', [[<C-\><C-n>]], { noremap = true,silent = true, desc = "Terminal normal mode" })
+
+vim.keymap.set('t', '<A-q>', [[<C-\><C-n>]], { noremap = true,silent = true, desc = "Terminal normal mode" })
 
 vim.keymap.set('n', ';;',":FloatermToggle<cr>",{ noremap = true, silent = true, desc = "Terminal toggle" })
 
-vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>:FloatermToggle<CR>]], { noremap = true, silent = true, desc = "Terminal toggle" })
+vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>:FloatermHide<CR>]], { noremap = true, silent = true, desc = "Terminal toggle" })
 
 vim.keymap.set('n', '<Space>tk', ":FloatermNext<cr>",{ noremap = true, silent = true, desc = "Terminal next" })
 vim.keymap.set('n', '<Space>tj', ":FloatermPrev<cr>",{ noremap = true, silent = true, desc = "Terminal prev" })
@@ -38,6 +40,15 @@ function get_compile_command()
     end
 end
 
+local function find_terminal_buf()
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+          local buftype = vim.api.nvim_buf_get_option(bufnr, 'buftype')
+          if buftype == 'terminal' then
+            return bufnr
+        end
+    end
+end
+
 function Run_command_in_term()
     local command = last_command or get_compile_command()
 
@@ -48,7 +59,12 @@ function Run_command_in_term()
 
     if command == nil and last_command == nil then return end
 
-    vim.cmd("FloatermShow")
+    if not find_terminal_buf() then
+        vim.cmd("FloatermNew")
+        vim.cmd("FloatermSend " .. "clear")
+    else
+        vim.cmd("FloatermShow")
+    end
 
     last_command = command
 
