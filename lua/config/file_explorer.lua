@@ -7,5 +7,5 @@ vim.keymap.set('n', '<Space>dd',function()
 end, { desc = 'Directory open' })
 
 vim.keymap.set('n', '<Space>d.',function()
-    mini_files.open(vim.fn.getcwd(),true)
+    mini_files.open(vim.uv.cwd(),true)
 end, { desc = 'Directory open cwd' })

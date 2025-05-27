@@ -11,7 +11,7 @@ function M.setup()
       end
     })
 
-    local success,error_message = pcall(vim.cmd.colorscheme, "colibri")
+    local success,error_message = pcall(vim.cmd.colorscheme, "helix")
 
     if not success then
         print(error_message)
