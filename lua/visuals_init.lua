@@ -1,7 +1,5 @@
 local M = {}
 
-local color_names = {"desert","catppuccin-mocha"}
-
 function M.setup()
     vim.api.nvim_create_augroup('MyColorSchemeGroup', { clear = true })
 
@@ -13,11 +11,7 @@ function M.setup()
       end
     })
 
-    local color_name = color_names[2]
-
-    assert(color_name)
-
-    local success,error_message = pcall(vim.cmd.colorscheme, color_name)
+    local success,error_message = pcall(vim.cmd.colorscheme, "colibri")
 
     if not success then
         print(error_message)
