@@ -1,7 +1,4 @@
-local success
-local lspconfig
-
-success,lspconfig = pcall(require, "lspconfig")
+local success, lspconfig = pcall(require, "lspconfig")
 
 if not success then
     return print("ERROR: lspconfig is not installed")
@@ -19,8 +16,7 @@ capabilities.textDocument.signatureHelp = {
 }
 
 local lsp_servers = {
-    "lua_ls",
-    "pyright",
+    { "lua_ls", "lua-language-server" },
     {
         "rust_analyzer",
         "rust-analyzer",
@@ -31,11 +27,13 @@ local lsp_servers = {
             capabilities = capabilities
         },
     },
+    { "ts_ls",  "tsserver" },
+    "pyright",
     "zls",
     "csharp_ls",
 }
 
-table.insert(lsp_servers,{
+table.insert(lsp_servers, {
     "clangd",
     opts = {
         capabilities = capabilities,
@@ -52,7 +50,7 @@ local default_opts = {
     capabilities = capabilities
 }
 
-for _,server in ipairs(lsp_servers) do
+for _, server in ipairs(lsp_servers) do
     if type(server) == "string" then
         if vim.fn.executable(server) == 1 and lspconfig[server] then
             lspconfig[server].setup(default_opts)
@@ -68,18 +66,18 @@ vim.diagnostic.config({
     virtual_text = true,
 })
 
-vim.api.nvim_create_autocmd("LspAttach",{
+vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
 
         if not client then return end
 
         if client.supports_method("textDocument/formatting") then
-            vim.keymap.set('n', '<Space>rf', ":lua vim.lsp.buf.format()<cr>", { silent = true,desc = 'Refactor format' })
-            vim.api.nvim_create_autocmd("BufWritePre",{
+            vim.keymap.set('n', '<Space>rf', ":lua vim.lsp.buf.format()<cr>", { silent = true, desc = 'Refactor format' })
+            vim.api.nvim_create_autocmd("BufWritePre", {
                 buffer = args.buf,
                 callback = function()
-                    vim.lsp.buf.format({bufnr = args.buf,id = client.id})
+                    vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
                 end
             })
         end
@@ -87,7 +85,8 @@ vim.api.nvim_create_autocmd("LspAttach",{
 })
 
 vim.keymap.set('n', '<Space>fsr', ":lua vim.lsp.buf.references()<cr>", { silent = true, desc = 'Find Symbol references' })
-vim.keymap.set('n', '<Space>fsw', ":lua vim.lsp.buf.workspace_symbol()<cr>", { silent = true, desc = 'Find Symbol workspace' })
+vim.keymap.set('n', '<Space>fsw', ":lua vim.lsp.buf.workspace_symbol()<cr>",
+    { silent = true, desc = 'Find Symbol workspace' })
 vim.keymap.set('n', '<Space>r.', ":lua vim.lsp.buf.code_action()<cr>", {
     silent = true,
     desc = 'Refactor code action',
