@@ -67,16 +67,23 @@ vim.diagnostic.config({
     virtual_text = true,
 })
 
+local cached_clients = {}
+
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         local client = vim.lsp.get_client_by_id(args.data.client_id)
 
         if not client then return end
 
-        notify("Connected", "info", {
-            title = "LSP",
-            timeout = 10
-        })
+        if not cached_clients[client.name] then
+            notify(("Connected"):format(), "info", {
+                title = ("%s LSP"):format(client.name),
+                icon = "",
+                timeout = 1,
+            })
+
+            cached_clients[client.name] = client
+        end
 
         if client.supports_method("textDocument/formatting") then
             vim.keymap.set('n', '<Space>rf', ":lua vim.lsp.buf.format()<cr>", { silent = true, desc = 'Refactor format' })

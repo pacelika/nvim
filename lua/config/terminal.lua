@@ -16,7 +16,7 @@ vim.keymap.set('t', '<C-k>', [[<C-\><C-n>:FloatermNext<CR>]], { noremap = true, 
 vim.keymap.set('t', '<C-n>', [[<C-\><C-n>:FloatermNew<CR>]], { noremap = true, silent = true, desc = "Terminal new" })
 vim.keymap.set('t', '<C-d>', [[<C-\><C-n>:FloatermKill<CR>]], { noremap = true, silent = true, desc = "Terminal kill" })
 
-vim.keymap.set('t', '<C-f>', [[<C-\><C-n>:FloatermUpdate --width=0.5 --height=0.5<cr>]],
+vim.keymap.set('t', '<C-f>', [[<C-\><C-n>:FloatermUpdate --width=0.6 --height=0.6<cr>]],
     { noremap = true, silent = true, desc = "Terminal toggle floating" })
 
 vim.keymap.set('t', '<C-l>', [[<C-\><C-n>:FloatermUpdate --width=1.0 --height=1.0<cr>]],

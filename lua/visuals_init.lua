@@ -11,7 +11,7 @@ function M.setup()
         end
     })
 
-    local success, error_message = pcall(vim.cmd.colorscheme, "catppuccin-mocha")
+    local success, error_message = pcall(vim.cmd.colorscheme, "rose-pine-main")
 
     if not success then
         print(error_message)
