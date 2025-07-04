@@ -5,6 +5,7 @@ function M.setup()
 
     require "config.telescope"
     require "config.file_explorer"
+    require "config.nvim_tree"
 
     require "config.treesj"
     require "config.tmux_nav"
