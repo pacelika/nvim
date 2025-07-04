@@ -1,5 +1,7 @@
 local success, lspconfig = pcall(require, "lspconfig")
 
+local notify = require("notify")
+
 if not success then
     return print("ERROR: lspconfig is not installed")
 end
@@ -30,7 +32,6 @@ local lsp_servers = {
     { "ts_ls",  "tsserver" },
     "pyright",
     "zls",
-    "csharp_ls",
 }
 
 table.insert(lsp_servers, {
@@ -71,6 +72,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
         local client = vim.lsp.get_client_by_id(args.data.client_id)
 
         if not client then return end
+
+        notify("Connected", "info", {
+            title = "LSP",
+            timeout = 10
+        })
 
         if client.supports_method("textDocument/formatting") then
             vim.keymap.set('n', '<Space>rf', ":lua vim.lsp.buf.format()<cr>", { silent = true, desc = 'Refactor format' })
