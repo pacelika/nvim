@@ -15,12 +15,12 @@ if vim.fn.has("win32") ~= 1 or vim.fn.has("win64") ~= 1 then
     )
 end
 
--- table.insert(plugins, {
---     'romgrk/barbar.nvim',
---     init = function()
---         vim.g.barbar_auto_setup = false
---     end
--- })
+table.insert(plugins, {
+    'romgrk/barbar.nvim',
+    init = function()
+        vim.g.barbar_auto_setup = false
+    end
+})
 
 table.insert(plugins, {
     "nvim-tree/nvim-tree.lua",

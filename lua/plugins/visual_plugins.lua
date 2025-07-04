@@ -15,4 +15,8 @@ return {
     {
         "rcarriga/nvim-notify"
     },
+    {
+        'vyfor/cord.nvim',
+        build = ':Cord update',
+    }
 }
