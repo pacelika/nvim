@@ -30,7 +30,7 @@ local lsp_servers = {
         },
         required = false,
     },
-    { "ts_ls",   "tsserver",           required = false },
+    { "ts_ls",   "tsserver",           required = true },
     { "pyright", required = false },
     { "zls",     required = false },
     { "gopls",   required = false },

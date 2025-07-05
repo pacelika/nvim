@@ -88,29 +88,68 @@ function Run_command_in_term()
     end
 end
 
-function Prompt_command()
-    local cmd = nil
+local pickers = require('telescope.pickers')
+local finders = require('telescope.finders')
+local conf = require('telescope.config').values
+local actions = require('telescope.actions')
+local cached_commands = {}
 
+local function get_input(p_cmd)
+    local picker = pickers.new({}, {
+        prompt_title = "Set terminal command",
+        finder = finders.new_table {
+            results = cached_commands,
+        },
+        sorter = conf.generic_sorter({}),
+        attach_mappings = function(prompt_bufnr, map)
+            map('i', '<CR>', function()
+                local cmd = vim.fn.getline('.')
+                actions.close(prompt_bufnr)
+
+                if cmd == ";" then
+                    last_command = Get_compile_command()
+                    return
+                elseif cmd == "" or cmd == nil then
+                    return
+                else
+                    last_command = cmd
+                    last_command = last_command:sub(3, #last_command)
+                end
+
+                vim.defer_fn(Run_command_in_term, 100)
+                local found_command = false
+
+                for _, command in ipairs(cached_commands) do
+                    if command == last_command then
+                        found_command = true
+                    end
+                end
+
+                if not found_command then
+                    table.insert(cached_commands, last_command)
+                end
+            end)
+            return true
+        end,
+    })
+
+    picker:find()
+
+    vim.schedule(function()
+        vim.api.nvim_feedkeys(p_cmd, 'n', false)
+    end)
+end
+
+function Prompt_command()
     if last_command == nil then
         last_command = Get_compile_command()
     end
 
     if last_command ~= nil then
-        cmd = vim.fn.input("Set terminal command: ", last_command)
+        get_input(last_command)
     else
-        cmd = vim.fn.input("Set terminal command: ")
+        get_input("")
     end
-
-    if cmd == ";" then
-        last_command = Get_compile_command()
-        return
-    elseif cmd == "" or cmd == nil then
-        return
-    else
-        last_command = cmd
-    end
-
-    Run_command_in_term()
 end
 
 vim.keymap.set('n', '\\\\', Run_command_in_term, { noremap = true, silent = true, desc = "Terminal run command" })
