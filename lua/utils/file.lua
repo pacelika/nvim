@@ -1,13 +1,5 @@
 local exports = {}
 
-function exports.get_config_loc()
-    return exports.is_win32() and vim.env.HOME .. "\\AppData\\Local\\nvim" or vim.env.HOME .. "/.config/nvim"
-end
-
-function exports.is_win32()
-    return vim.loop.os_uname().sysname == "Windows_NT"
-end
-
 function exports.read_all_file(path)
     if not path then return end
 
@@ -22,8 +14,26 @@ function exports.read_all_file(path)
     return content
 end
 
+function exports.get_config_path()
+    local config_dir = os.getenv("LOCALAPPDATA")
+
+    if not config_dir then
+        config_dir = vim.fn.expand("~")
+
+        if not config_dir then
+            return print("ERROR: FAILED TO GET CONFIG DIR")
+        end
+
+        config_dir = config_dir .. "/.config"
+    end
+
+    local config_path = config_dir .. "/nvim"
+
+    return config_path
+end
+
 function exports.file_exists(file)
-	if not file then return end
+    if not file then return end
     local ok, err, code = os.rename(file, file)
 
     if not ok then
@@ -39,7 +49,7 @@ function exports.isdir(path)
 end
 
 function exports.mkdir(dirname)
-	if not dirname then return end
+    if not dirname then return end
     os.execute("mkdir " .. dirname)
 end
 
@@ -67,11 +77,11 @@ function exports.read_file_lines(path)
     return lines;
 end
 
-function exports.write_file(path,content)
+function exports.write_file(path, content)
     if not content or not path then return end
 
     local file = io.open(path, "w")
-    if not file then return print(string.format("Could not write file: %s does not exist",path)) end
+    if not file then return print(string.format("Could not write file: %s does not exist", path)) end
 
     local status = file:write(content)
     file:close()
