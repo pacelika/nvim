@@ -22,6 +22,7 @@ vim.keymap.set('t', '<C-f>', [[<C-\><C-n>:FloatermUpdate --width=0.6 --height=0.
 vim.keymap.set('t', '<C-l>', [[<C-\><C-n>:FloatermUpdate --width=1.0 --height=1.0<cr>]],
     { noremap = true, silent = true, desc = "Terminal toggle full screen" })
 
+local notify = require("notify")
 local last_command = nil
 
 local os_name = vim.loop.os_uname().sysname
@@ -60,12 +61,10 @@ end
 function Run_command_in_term()
     local command = last_command or Get_compile_command()
 
-    if not command then
+    if not command or (command == nil and last_command == nil) or #command == 0 then
         Prompt_command()
         return
     end
-
-    if command == nil and last_command == nil then return end
 
     if not Find_terminal_buf() then
         vim.cmd("FloatermNew")
@@ -95,6 +94,8 @@ local actions = require('telescope.actions')
 local cached_commands = {}
 
 local function get_input(p_cmd)
+    local previous_state = nil
+
     local picker = pickers.new({}, {
         prompt_title = "Set terminal command",
         finder = finders.new_table {
@@ -105,28 +106,51 @@ local function get_input(p_cmd)
             map('i', '<CR>', function()
                 local cmd = vim.fn.getline('.')
                 actions.close(prompt_bufnr)
+                last_command = cmd
+                last_command = last_command:sub(3, #last_command)
 
-                if cmd == ";" then
+                if last_command == ";" then
                     last_command = Get_compile_command()
-                    return
-                elseif cmd == "" or cmd == nil then
+                    notify(("Reset Success"):format(), "info", {
+                        title = ("Terminal"):format(),
+                        icon = "",
+                        timeout = 1,
+                    })
                     return
                 else
-                    last_command = cmd
-                    last_command = last_command:sub(3, #last_command)
-                end
+                    if not last_command then
+                        notify(("Last Command Not Found"):format(), "error", {
+                            title = ("Terminal"):format(),
+                            icon = "",
+                        })
+                        return get_input("")
+                    end
 
-                vim.defer_fn(Run_command_in_term, 100)
-                local found_command = false
+                    previous_state = last_command
 
-                for _, command in ipairs(cached_commands) do
-                    if command == last_command then
-                        found_command = true
+                    if last_command ~= "" and last_command ~= " " and #last_command ~= 0 and last_command ~= nil then
+                        last_command = previous_state
+                    else
+                        notify(("Empty Command"):format(), "error", {
+                            title = ("Terminal"):format(),
+                            icon = "",
+                        })
                     end
                 end
 
-                if not found_command then
-                    table.insert(cached_commands, last_command)
+                if last_command ~= "" and last_command ~= " " and #last_command ~= 0 and last_command ~= nil then
+                    vim.defer_fn(Run_command_in_term, 100)
+                    local found_command = false
+
+                    for _, command in ipairs(cached_commands) do
+                        if command == last_command then
+                            found_command = true
+                        end
+                    end
+
+                    if not found_command then
+                        table.insert(cached_commands, last_command)
+                    end
                 end
             end)
             return true
