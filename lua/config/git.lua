@@ -1,4 +1,5 @@
 local telescope_builtin = require('telescope.builtin')
+local Git = require "utils.git"
 
 local function is_diffview_open()
     for _, win in ipairs(vim.api.nvim_list_wins()) do
@@ -30,35 +31,11 @@ local function find_logview_buffer()
     end
 end
 
-local function is_git_repo()
-    local buf_path = vim.api.nvim_buf_get_name(0)
-    if buf_path == "" then return false end
-
-    local file_dir = vim.fn.fnamemodify(buf_path, ":h")
-    local os_name = vim.loop.os_uname().sysname 
-
-    local cmd
-
-    if os_name == "Windows_NT" then
-        cmd = string.format('cd /d "%s" && git rev-parse --is-inside-work-tree 2>nul', file_dir)
-    else
-        cmd = string.format('cd "%s" && git rev-parse --is-inside-work-tree 2>/dev/null', file_dir)
-    end
-
-    local handle = io.popen(cmd)
-    if not handle then return false end
-
-    local result = handle:read('*a')
-    handle:close()
-
-    return result:match("true") ~= nil
-end
-
 local function toggle_git_diffview()
     if is_diffview_open() then
         vim.cmd.DiffviewClose()
     elseif not is_diffview_open() then
-        if is_git_repo() then
+        if Git.is_git_repo() then
             vim.cmd.DiffviewOpen()
         else
             print("INFO: This workspace does not have a .git folder")
@@ -84,3 +61,4 @@ vim.keymap.set('n', '<Space>ga.',":Git add .<cr>", { desc = 'Git add .' })
 vim.keymap.set('n', '<Space>gaf',":Git add ", { desc = 'Git add file' })
 vim.keymap.set('n', '<Space>gcc',":Git commit<cr>", { desc = 'Git commit' })
 vim.keymap.set('n', '<Space>gP',":Git push<cr>", { desc = 'Git push' })
+vim.keymap.set('n', '<Space>g!',":Git pull<cr>", { desc = 'Git push' })

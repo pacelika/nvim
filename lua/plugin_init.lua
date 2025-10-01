@@ -1,5 +1,6 @@
 local M = {}
 local file = require "utils.file"
+local Git = require "utils.git"
 
 function M.setup()
     require "plugins"
@@ -8,6 +9,23 @@ function M.setup()
         local config_path = file.get_config_path()
         vim.cmd("cd " .. config_path)
         vim.cmd("e init.lua")
+    end, {})
+
+    vim.api.nvim_create_user_command("ConfigUpdate", function()
+        local current_project_dir = Git.is_git_repo() and Git.get_git_root()
+        local old_file_path = vim.fn.expand('%:p')
+        local config_path = file.get_config_path()
+        vim.cmd("cd " .. config_path)
+        vim.cmd("e init.lua")
+        vim.cmd("Git pull")
+        vim.cmd("source %")
+
+        if current_project_dir then
+            vim.cmd("cd " .. current_project_dir)
+            vim.cmd("e "..old_file_path)
+        else
+            vim.cmd("e "..old_file_path)
+        end
     end, {})
 
     require "config.telescope"
