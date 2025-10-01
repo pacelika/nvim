@@ -28,7 +28,6 @@ function M.setup()
             vim.cmd("e "..old_file_path)
         else
             print(":"..ConfigUpdateCommand or "".. " Could not find old project path")
-            vim.cmd("cd " .. vim.fn.getcwd())
             vim.cmd("e "..old_file_path)
         end
     end, {})
