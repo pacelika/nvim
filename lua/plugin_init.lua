@@ -2,6 +2,8 @@ local M = {}
 local file = require "utils.file"
 local Git = require "utils.git"
 
+local ConfigUpdateCommand = "ConfigUpdate"
+
 function M.setup()
     require "plugins"
 
@@ -11,8 +13,8 @@ function M.setup()
         vim.cmd("e init.lua")
     end, {})
 
-    vim.api.nvim_create_user_command("ConfigUpdate", function()
-        local current_project_dir = Git.is_git_repo() and Git.get_git_root()
+    vim.api.nvim_create_user_command(ConfigUpdateCommand, function()
+        local old_project_dir = Git.is_git_repo() and Git.get_git_root()
         local old_file_path = vim.fn.expand('%:p')
         local config_path = file.get_config_path()
         vim.cmd("cd " .. config_path)
@@ -20,10 +22,13 @@ function M.setup()
         vim.cmd("Git pull")
         vim.cmd("source %")
 
-        if current_project_dir then
-            vim.cmd("cd " .. current_project_dir)
+        -- checks if we were in a git project -- 
+        if old_project_dir then
+            vim.cmd("cd " .. old_project_dir)
             vim.cmd("e "..old_file_path)
         else
+            print(":"..ConfigUpdateCommand or "".. " Could not find old project path")
+            vim.cmd("cd " .. vim.fn.getcwd())
             vim.cmd("e "..old_file_path)
         end
     end, {})
