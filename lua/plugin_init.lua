@@ -4,7 +4,7 @@ local file = require "utils.file"
 function M.setup()
     require "plugins"
 
-    vim.api.nvim_create_user_command("Config", function()
+    vim.api.nvim_create_user_command("ConfigOpen", function()
         local config_path = file.get_config_path()
         vim.cmd("cd " .. config_path)
         vim.cmd("e init.lua")
@@ -12,8 +12,6 @@ function M.setup()
 
     require "config.telescope"
     require "config.file_explorer"
-    require "config.nvim_tree"
-    -- require "config.barbar"
 
     require "config.treesj"
     require "config.tmux_nav"
@@ -23,7 +21,6 @@ function M.setup()
     require "config.harpoon"
 
     require "config.git"
-    require "gitsigns"
 
     require "config.treesitter"
     require "config.lsp"

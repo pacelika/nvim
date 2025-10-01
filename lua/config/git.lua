@@ -76,7 +76,7 @@ local function toggle_git_log_buffer()
     end
 end
 
-vim.keymap.set('n', '<Space>gvd', toggle_git_diffview, { desc = 'Git view diff' })
+vim.keymap.set('n', '<M-g>', toggle_git_diffview, { desc = 'Git view diff' })
 vim.keymap.set('n', '<Space>gvl',toggle_git_log_buffer, { desc = 'Git log' })
 vim.keymap.set('n', '<Space>gvc', telescope_builtin.git_commits, { desc = 'Git view commit' })
 

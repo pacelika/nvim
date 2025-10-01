@@ -6,6 +6,8 @@ function M.setup()
     vo.background = "dark"
     vo.termguicolors = true
 
+    vo.sessionoptions:remove("curdir")
+
     vo.tabstop = 4
     vo.softtabstop = 4
     vo.shiftwidth = 4

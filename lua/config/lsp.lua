@@ -1,6 +1,7 @@
 local success, lspconfig = pcall(require, "lspconfig")
 
 local notify = require("notify")
+local format_on_save = false
 
 if not success then
     return print("ERROR: lspconfig is not installed")
@@ -134,12 +135,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         if client.supports_method("textDocument/formatting") then
             vim.keymap.set('n', '<Space>rf', ":lua vim.lsp.buf.format()<cr>", { silent = true, desc = 'Refactor format' })
-            vim.api.nvim_create_autocmd("BufWritePre", {
-                buffer = args.buf,
-                callback = function()
-                    vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
-                end
-            })
+
+            if format_on_save then
+                vim.api.nvim_create_autocmd("BufWritePre", {
+                    buffer = args.buf,
+                    callback = function()
+                        vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
+                    end
+                })
+            end
         end
     end
 })
