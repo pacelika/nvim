@@ -1,7 +1,6 @@
 return {
     {
         'nvim-treesitter/nvim-treesitter',
-        event = { "InsertEnter" },
         run = function()
             local M = require('nvim-treesitter.install')
             M.compilers = { vim.fn.getenv('CC'), "cc", "gcc", "clang", "cl", "zig" }

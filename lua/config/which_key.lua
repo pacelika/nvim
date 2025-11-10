@@ -17,7 +17,7 @@ xpcall(function()
     })
 
     if not wk then return print("ERROR: which-key is missing") end
-    if not wk.add then return print("ERROR: which-key 'add' function is missing") end
+    if not wk.add then return end
 
     wk.add({"<Space>f",group = "Find"})
     wk.add({"<Space>fs",group = "Symbol"})

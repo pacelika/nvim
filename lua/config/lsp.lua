@@ -1,11 +1,9 @@
-local success, lspconfig = pcall(require, "lspconfig")
+local lspconfig = vim.lsp.config
+
+if lspconfig == nil then return print("lspconfig is nil") end
 
 local notify = require("notify")
 local format_on_save = false
-
-if not success then
-    return print("ERROR: lspconfig is not installed")
-end
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -65,7 +63,7 @@ local missing_servers = {}
 
 for _, server in ipairs(lsp_servers) do
     if type(server) == "string" then
-        if vim.fn.executable(server) == 1 and lspconfig[server] then
+        if vim.fn.executable(server) == 1 and lspconfig[server] and lspconfig[server].setup then
             lspconfig[server].setup(default_opts)
         else
             if not cached_clients[server] then
@@ -73,7 +71,7 @@ for _, server in ipairs(lsp_servers) do
             end
         end
     elseif type(server) == "table" then
-        if vim.fn.executable(server[2] or server[1]) == 1 and lspconfig[server[1]] then
+        if vim.fn.executable(server[2] or server[1]) == 1 and lspconfig[server[1]] and lspconfig[server[1]].setup then
             lspconfig[server[1]].setup(server.opts or default_opts)
         else
             if not cached_clients[server[1]] then
