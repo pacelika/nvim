@@ -33,6 +33,7 @@ local lsp_servers = {
     { "pyright", required = false },
     { "zls",     required = false },
     { "gopls",   required = false },
+    { "nimls","nimlangserver", required = false},
 }
 
 table.insert(lsp_servers, {
@@ -81,35 +82,37 @@ for _, server in ipairs(lsp_servers) do
     end
 end
 
-if #missing_servers > 0 then
-    local message = ""
-    local last_index = 0
+vim.api.nvim_create_user_command("LspCheckMissingServers", function()
+    if #missing_servers > 0 then
+        local message = ""
+        local last_index = 0
 
-    for index, data in ipairs(missing_servers) do
-        if index ~= #missing_servers then
-            if data.required == nil or data.required == true then
-                message = message .. data[1] .. "\n"
-                last_index = last_index + 1
-            end
-        else
-            if data.required == nil or data.required == true then
-                message = message .. data[1]
-                last_index = last_index + 1
+        for index, data in ipairs(missing_servers) do
+            if index ~= #missing_servers then
+                if data.required == nil or data.required == true then
+                    message = message .. data[1] .. "\n"
+                    last_index = last_index + 1
+                end
+            else
+                if data.required == nil or data.required == true then
+                    message = message .. data[1]
+                    last_index = last_index + 1
+                end
             end
         end
-    end
 
-    if last_index ~= #missing_servers then
-        message = message:sub(1, #message - 1)
-    end
+        if last_index ~= #missing_servers then
+            message = message:sub(1, #message - 1)
+        end
 
-    if #message ~= 0 then
-        notify(("%s"):format(message), "info", {
-            title = ("LSP Not Installed"):format(),
-            icon = "",
-        })
+        if #message ~= 0 then
+            notify(("%s"):format(message), "info", {
+                title = ("LSP Not Installed"):format(),
+                icon = "",
+            })
+        end
     end
-end
+end, {})
 
 vim.diagnostic.config({
     virtual_text = true,

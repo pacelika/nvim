@@ -11,6 +11,7 @@ telescope.setup({
             "node_modules/*",
             "target/*",
             "bin/*",
+            "build/*",
             "cache",
             "CMakeFiles",
             "out",
